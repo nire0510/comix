@@ -190,7 +190,7 @@ module.exports = {
     // Attribute name which its value contains the event name for all track_links & track_forms events (it should not match any existing track_custom events names):
     attribute: 'data-comix',
     // Should page view be tracked? the ebent name is the document's title:
-    track_pageview: true,
+    track_pageview: false,
     // Should links clicks be tracked? requires to have an attribute named {{ attribute }}:
     track_links: false,
     // Should forms submissions be tracked? requires to have an attribute named {{ attribute }}:
@@ -341,7 +341,9 @@ function _ready() {
 
   // Extract all query string tokens & add them to all events along with the additional properties:
   // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-  mixpanel.register(helpers.extend(decode(document.location.search && document.location.search.substr(1)) || {}, objSettings.additional_properties));
+  if (this === window) {
+    mixpanel.register(helpers.extend(decode(document.location.search && document.location.search.substr(1)) || {}, objSettings.additional_properties));
+  }
 
   // Should track page views?
   if (objSettings.track_pageview) {
@@ -462,11 +464,14 @@ module.exports = {
    * @param {object} [objProperties] A set of properties to include with the event you're sending
    */
   trackPageView: function trackPageView (objProperties) {
-    objProperties = objProperties || {};
-    objProperties[config.dictionary.pageNamePropertyName] = document.title;
-    objProperties[config.dictionary.pageURLPropertyName] = window.location.pathname;
+    // Works only in browser environment:
+    if (this === window) {
+      objProperties = objProperties || {};
+      objProperties[config.dictionary.pageNamePropertyName] = document.title;
+      objProperties[config.dictionary.pageURLPropertyName] = window.location.pathname;
 
-    this.track(config.dictionary.pageViewedEventName, objProperties);
+      this.track(config.dictionary.pageViewedEventName, objProperties);
+    }
   },
 
   /**

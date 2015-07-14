@@ -39,11 +39,14 @@ module.exports = {
    * @param {object} [objProperties] A set of properties to include with the event you're sending
    */
   trackPageView: function trackPageView (objProperties) {
-    objProperties = objProperties || {};
-    objProperties[config.dictionary.pageNamePropertyName] = document.title;
-    objProperties[config.dictionary.pageURLPropertyName] = window.location.pathname;
+    // Works only in browser environment:
+    if (this === window) {
+      objProperties = objProperties || {};
+      objProperties[config.dictionary.pageNamePropertyName] = document.title;
+      objProperties[config.dictionary.pageURLPropertyName] = window.location.pathname;
 
-    this.track(config.dictionary.pageViewedEventName, objProperties);
+      this.track(config.dictionary.pageViewedEventName, objProperties);
+    }
   },
 
   /**

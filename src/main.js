@@ -73,7 +73,9 @@ function _ready() {
 
   // Extract all query string tokens & add them to all events along with the additional properties:
   // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-  mixpanel.register(helpers.extend(decode(document.location.search && document.location.search.substr(1)) || {}, objSettings.additional_properties));
+  if (this === window) {
+    mixpanel.register(helpers.extend(decode(document.location.search && document.location.search.substr(1)) || {}, objSettings.additional_properties));
+  }
 
   // Should track page views?
   if (objSettings.track_pageview) {
