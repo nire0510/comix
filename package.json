@@ -8,8 +8,8 @@
     "browserify": "^10.2.3"
   },
   "scripts": {
-    "build": "browserify src/main.js | uglifyjs > dist/comix.min.js",
-    "build-unminified": "browserify src/main.js > dist/comix.js"
+    "build": "browserify src/main.js --standalone comix | uglifyjs > dist/comix.min.js",
+    "build-unminified": "browserify src/main.js --standalone comix > dist/comix.js"
   },
   "keywords": [
     "tracking",
