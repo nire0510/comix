@@ -1,6 +1,6 @@
 {
   "name": "comix",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Mixpanel driver library",
   "main": "src/main.js",
   "dependencies": {},
