@@ -71,8 +71,8 @@ Mixpanel driver library
 * Jul 14<sup>th</sup>, 2015 - First release
 
 ## Credits
-* (Mixpanel)[https://mixpanel.com/]
-* (Browserify)[http://browserify.org/]
+* [Mixpanel](https://mixpanel.com/)
+* [Browserify](http://browserify.org/)
 
 ## License
 MIT
