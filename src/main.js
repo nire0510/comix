@@ -53,26 +53,6 @@ module.exports = {
   },
 
   /**
-   * Track link click event
-   * @param {string} strSelector A valid DOM query selector
-   * @param {object} strEventName The name of the event to track
-   * @param {object} [objProperties] A properties object or function that returns a dictionary of properties when passed a DOMElement
-   */
-  trackLink: function trackLink (strSelector, strEventName, objProperties) {
-    mp.trackLink(strSelector, strEventName, objProperties);
-  },
-
-  /**
-   * Track form submission event
-   * @param {string} strSelector A valid DOM query
-   * @param {object} strEventName The name of the event to track
-   * @param {object} [objProperties] A properties object or function that returns a dictionary of properties when passed a DOMElement
-   */
-  trackForm: function trackForm (strSelector, strEventName, objProperties) {
-    mp.trackForm(strSelector, strEventName, objProperties);
-  },
-
-  /**
    * Disable events on the Mixpanel object
    * @param {[string]} [arrEventNames] An array of event names to disable. If passed no arguments, this function disables tracking of any event.
    */

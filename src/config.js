@@ -11,9 +11,9 @@ module.exports = {
     attribute: 'data-comix',
     // Should page view be tracked? the ebent name is the document's title:
     track_pageview: true,
-    // Should links clicks be tracked? requires to have an attribute named {{name_attribute}}
+    // Should links clicks be tracked? requires to have an attribute named {{ attribute }}:
     track_links: false,
-    // Should forms submissions be tracked? requires to have an attribute named {{name_attribute}}
+    // Should forms submissions be tracked? requires to have an attribute named {{ attribute }}:
     track_forms: false,
     // Should custom events be tracked? either false or an array
     track_custom: false

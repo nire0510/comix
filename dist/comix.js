@@ -191,9 +191,9 @@ module.exports = {
     attribute: 'data-comix',
     // Should page view be tracked? the ebent name is the document's title:
     track_pageview: true,
-    // Should links clicks be tracked? requires to have an attribute named {{name_attribute}}
+    // Should links clicks be tracked? requires to have an attribute named {{ attribute }}:
     track_links: false,
-    // Should forms submissions be tracked? requires to have an attribute named {{name_attribute}}
+    // Should forms submissions be tracked? requires to have an attribute named {{ attribute }}:
     track_forms: false,
     // Should custom events be tracked? either false or an array
     track_custom: false
@@ -318,26 +318,6 @@ module.exports = {
    */
   track: function track (strEventName, objProperties, fncCallback) {
     mp.track(strEventName, objProperties, fncCallback);
-  },
-
-  /**
-   * Track link click event
-   * @param {string} strSelector A valid DOM query selector
-   * @param {object} strEventName The name of the event to track
-   * @param {object} [objProperties] A properties object or function that returns a dictionary of properties when passed a DOMElement
-   */
-  trackLink: function trackLink (strSelector, strEventName, objProperties) {
-    mp.trackLink(strSelector, strEventName, objProperties);
-  },
-
-  /**
-   * Track form submission event
-   * @param {string} strSelector A valid DOM query
-   * @param {object} strEventName The name of the event to track
-   * @param {object} [objProperties] A properties object or function that returns a dictionary of properties when passed a DOMElement
-   */
-  trackForm: function trackForm (strSelector, strEventName, objProperties) {
-    mp.trackForm(strSelector, strEventName, objProperties);
   },
 
   /**
