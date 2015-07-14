@@ -1,0 +1,25 @@
+{
+  "name": "comix",
+  "version": "0.0.1",
+  "description": "Mixpanel driver library",
+  "main": "src/main.js",
+  "dependencies": {},
+  "devDependencies": {
+    "browserify": "^10.2.3"
+  },
+  "scripts": {
+    "build": "browserify src/main.js | uglifyjs > dist/comix.min.js",
+    "build-unminified": "browserify src/main.js > dist/comix.js"
+  },
+  "keywords": [
+    "tracking",
+    "analytics",
+    "mixpanel",
+    "web",
+    "tool",
+    "library",
+    "nodejs"
+  ],
+  "author": "Nir Elbaz <nire0510@gmail.com> (http://nirelbaz.com/)",
+  "license": "MIT"
+}
