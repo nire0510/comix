@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>Comix library tests</title>
+  <!-- Comix library -->
+  <script src="../dist/comix.js"></script>
+</head>
+<body>
+
+<h1>Comix</h1>
+
+<p><strong>Comix</strong> is a library which facilitates implementation of the fabulous MixPanel analytics tool.</p>
+
+<p>
+  <strong>Comix</strong> can track links clicks when <code>track_links</code> is set to true: <br/>
+<blockquote>
+  This is a <a id="google" href="http://google.com" data-comix="Google link clicked" title="Google">link to Google</a>
+</blockquote>
+</p>
+
+<p>
+  It can also track forms submission when <code>track_forms</code> is set to true: <br/>
+<blockquote>
+  <form name="myForm" id="myForm" action="" data-comix="myForm form submitted">
+    <input type="text" placeholder="Type your name"/> <input type="submit" value="Submit"/>
+  </form>
+</blockquote>
+</p>
+
+<p>
+  You can configure <strong>Comix</strong> to track custom events, such as buttons clicks, select box changes and more:
+  <br/>
+<blockquote>
+  <button data-comix-click="Correct button clicked" onclick="alert('bla')">Click me (track)</button>
+</blockquote>
+</p>
+
+<p>
+  However, the button below won't be tracked since it does not match the selector of our custom rule: <br/>
+<blockquote>
+  <button>Click me (no track)</button>
+</blockquote>
+</p>
+
+<p>
+  Another sample of a custom rule is to track every change event of dropdown lists: <br/>
+<blockquote>
+  <select name="ddlb" id="ddlb">
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+    <option value="opel">Opel</option>
+    <option value="audi">Audi</option>
+  </select>
+</blockquote>
+</p>
+
+<script>
+  comix.init({
+    token: 'PUT_YOUR_MIXPANEL_TOKEN_HERE',
+    track_pageview: true,
+    attribute: 'data-comix',
+    track_links: true,
+    track_forms: true,
+    track_custom: [
+      {
+        selector: '[data-comix-click]',
+        event: 'click',
+        name: {
+          type: 'attribute',
+          value: 'data-comix-click'
+        }
+      },
+      {
+        selector: 'select',
+        event: 'change',
+        name: {
+          type: 'function',
+          value: function (elm) {
+            return 'Select box changed. id: ' + elm.id + ' value: ' + elm.value;
+          }
+        }
+      }
+    ]
+  });
+</script>
+</body>
+</html>
