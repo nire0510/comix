@@ -1,5 +1,5 @@
 # Comix
-Mixpanel driver library
+Mixpanel driver library for web applications
 
 ## Installation
 * Install **Comix** with npm:  
@@ -68,7 +68,7 @@ Mixpanel driver library
 5. Submit a pull request :D
 
 ## History
-* Jul 14<sup>th</sup>, 2015 - First release
+* **0.0.4** Jul 14<sup>th</sup>, 2015 - First release
 
 ## Credits
 * [Mixpanel](https://mixpanel.com/)
