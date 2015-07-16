@@ -13,49 +13,53 @@
 <p><strong>Comix</strong> is a library which facilitates implementation of the fabulous MixPanel analytics tool.</p>
 
 <p>
-  <strong>Comix</strong> can track links clicks when <code>track_links</code> is set to true: <br/>
-<blockquote>
-  This is a <a id="google" href="http://google.com" data-comix="Google link clicked" title="Google">link to Google</a>
-</blockquote>
+  It can track links clicks when <code>track_links</code> is set to true: <br/>
+  <blockquote>
+    This is a <a id="google" href="http://google.com" data-comix="Google link clicked" title="Google">link to Google</a>. It will be tracked.<br/>
+    This is a <a id="facebook" href="http://facebook.com" title="Facebook">link to Facebook</a>. This link won't be tracked since it is missing the <code>data-comix</code> attribute.<br/>
+  </blockquote>
 </p>
 
 <p>
-  It can also track forms submission when <code>track_forms</code> is set to true: <br/>
-<blockquote>
-  <form name="myForm" id="myForm" action="" data-comix="myForm form submitted">
-    <input type="text" placeholder="Type your name"/> <input type="submit" value="Submit"/>
-  </form>
-</blockquote>
+  It can also track forms submissions when <code>track_forms</code> is set to true: <br/>
+  <blockquote>
+    <form name="myForm" id="myForm" action="" data-comix="myForm form submitted">
+      <input type="text" placeholder="Type your name"/> <input type="submit" value="Submit"/>
+    </form>
+  </blockquote>
 </p>
 
 <p>
-  You can configure <strong>Comix</strong> to track custom events, such as buttons clicks, select box changes and more:
+  You can configure <strong>Comix</strong> to track custom events, such as buttons clicks and more:
   <br/>
-<blockquote>
-  <button data-comix-click="Correct button clicked" onclick="alert('bla')">Click me (track)</button>
-</blockquote>
-</p>
-
-<p>
-  However, the button below won't be tracked since it does not match the selector of our custom rule: <br/>
-<blockquote>
-  <button>Click me (no track)</button>
-</blockquote>
+  <blockquote>
+    <button data-comix-click="Correct button clicked" onclick="alert('bla')">Click me (track)</button>
+    <br/><br/>
+    However, the button below won't be tracked since it does not match the selector of our custom rule: <br/>
+    <button>Click me (no track)</button>
+  </blockquote>
 </p>
 
 <p>
   Another sample of a custom rule is to track every change event of dropdown lists: <br/>
-<blockquote>
-  <select name="ddlb" id="ddlb">
-    <option value="volvo">Volvo</option>
-    <option value="saab">Saab</option>
-    <option value="opel">Opel</option>
-    <option value="audi">Audi</option>
-  </select>
-</blockquote>
+  <blockquote>
+    <select name="ddlb" id="ddlb">
+      <option value="volvo">Volvo</option>
+      <option value="saab">Saab</option>
+      <option value="opel">Opel</option>
+      <option value="audi">Audi</option>
+    </select>
+  </blockquote>
 </p>
 
-<p>For more info, visit <a href="https://github.com/nire0510/comix/blob/master/README.md#comix">Comix Readme</a>.</p>
+<p>
+  You can disable some events or all events in a specific page by calling the <code>disable</code> method.<br/>
+  <blockquote>
+  <input type="checkbox" name="cbxDisableEvents" id="cbxDisableEvents"/> <label for="cbxDisableEvents">Disable all events</label>
+  </blockquote>
+</p>
+
+<h3>For more info, visit <a href="https://github.com/nire0510/comix/blob/master/README.md#comix" target="_blank">Comix Readme</a>.</h3>
 
 <script>
   comix.init({
@@ -85,6 +89,17 @@
       }
     ]
   });
+
+  document.getElementById('cbxDisableEvents').addEventListener('change', function (e) {
+    switch (e.target.checked) {
+      case false:
+        document.location.reload();
+        break;
+      case true:
+        comix.disableEvents();
+        break;
+    }
+  }, false);
 </script>
 </body>
 </html>

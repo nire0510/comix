@@ -269,92 +269,89 @@ module.exports = {
 /* global module, require, global */
 var config = require('./config.js'),
   decode = require('querystring').decode,
-  mp = require('./mixpanel.js'),
   helpers = require('./helpers.js'),
+  mp = require('./mixpanel.js'),
+  mpTracking = require('./mixpanel-tracking.js'),
+  mpPeople = require('./mixpanel-people.js'),
   objSettings = config.defaults;
 
 module.exports = {
-  /**
-   * Comix initialization
-   * @param {object} objParams Initialization parameters
-   */
-  init: function init (objParams) {
-    var objInitProperties = {};
+  init: init,
 
-    // Extend defaults:
-    for (var key in objSettings) {
-      if (objSettings.hasOwnProperty(key) && objParams.hasOwnProperty(key)) {
-        objSettings[key] = objParams[key];
-      }
-    }
+  track: mpTracking.trackEvent,
+  trackEvent: mpTracking.trackEvent,
+  trackCharge: mpTracking.trackCharge,
+  disableEvents: mpTracking.disableEvents,
+  registerProperties: mpTracking.registerProperties,
+  unregisterProperties: mpTracking.unregisterProperties,
 
-    // Make sure Mixpanel token was set:
-    if (objSettings.token === '') {
-      throw new Error(config.dictionary.missingToken);
-    }
-
-    // Compose an initialization object based on Mixpanel scheme, by throwing out those which are not in scheme:
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    config.mixpanel_init.forEach(function initProperties (key) {
-      if (objSettings.hasOwnProperty(key)) {
-        objInitProperties[key] = objSettings[key];
-      }
-    });
-    // we prefer our pageview event!
-    objInitProperties.track_pageview = false;
-    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
-    // We're adding a ready callback, too:
-    objInitProperties.loaded = _ready;
-
-    // Initialize mixpanel proxy:
-    mp.init(objParams.token, objInitProperties);
-  },
-
-  /**
-   * Track an event
-   * @param {string} strEventName The name of the event
-   * @param {object} [objProperties] A set of properties to include with the event you're sending
-   * @param {function} [fncCallback] If provided, the callback function will be called after tracking the event
-   */
-  track: function track (strEventName, objProperties, fncCallback) {
-    mp.track(strEventName, objProperties, fncCallback);
-  },
-
-  /**
-   * Disable events on the Mixpanel object
-   * @param {[string]} [arrEventNames] An array of event names to disable. If passed no arguments, this function disables tracking of any event.
-   */
-  disable: function disable (arrEventNames) {
-    mp.disable(arrEventNames);
-  }
+  identifyUser: mpPeople.identifyUser,
+  setUserProperties: mpPeople.setUserProperties
 };
+
+/**
+ * Comix initialization
+ * @param {object} objParams Initialization parameters
+ */
+function init (objParams) {
+  var objInitProperties = {};
+
+  // Extend defaults:
+  for (var key in objSettings) {
+    if (objSettings.hasOwnProperty(key) && objParams.hasOwnProperty(key)) {
+      objSettings[key] = objParams[key];
+    }
+  }
+
+  // Make sure Mixpanel token was set:
+  if (objSettings.token === '') {
+    throw new Error(config.dictionary.missingToken);
+  }
+
+  // Compose an initialization object based on Mixpanel scheme, by throwing out those which are not in scheme:
+  // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+  config.mixpanel_init.forEach(function initProperties (key) {
+    if (objSettings.hasOwnProperty(key)) {
+      objInitProperties[key] = objSettings[key];
+    }
+  });
+  // BUT - we prefer our pageview event!
+  objInitProperties.track_pageview = false;
+  // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+
+  // We're adding a ready callback, too:
+  objInitProperties.loaded = _ready;
+
+  // Initialize mixpanel proxy:
+  mp.init(objParams.token, objInitProperties);
+}
 
 /**
  * Mixpanel library ready callback
  * @private
  */
-function _ready() {
+function _ready () {
   var arrRegisteredEvents = [];
 
   // matches polyfill:
-  Element.prototype.matches = Element.prototype.matches || Element.prototype.msMatchesSelector;
+  Element.prototype.matches = Element.prototype.matches || Element.prototype.webkitMatchesSelector || Element.prototype.mozMatchesSelector || Element.prototype.msMatchesSelector;
 
   // Extract all query string tokens & add them to all events along with the additional properties:
   // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
   if (this === window) {
-    mixpanel.register(helpers.extend(decode(document.location.search && document.location.search.substr(1)) || {}, objSettings.additional_properties));
+    mpTracking.registerProperties(helpers.extend(decode(document.location.search && document.location.search.substr(1)) || {}, objSettings.additional_properties));
   }
 
   // Should track page views?
   if (objSettings.track_pageview) {
-    mp.trackPageView();
+    mpTracking.trackPageView();
   }
 
   // Should track links clicks?
   // (requires the a link contains id, href & event attributes)
   if (objSettings.track_links) {
     [].forEach.call(document.querySelectorAll('a[href][id][' + objSettings.attribute + ']'), function each(element) {
-      mp.trackLink('#' + element.id, element.getAttribute(objSettings.attribute));
+      mpTracking.trackLink('#' + element.id, element.getAttribute(objSettings.attribute));
     });
   }
 
@@ -362,7 +359,7 @@ function _ready() {
   // (requires the a form contains id & event attributes)
   if (objSettings.track_forms) {
     [].forEach.call(document.querySelectorAll('form[id][' + objSettings.attribute + ']'), function each(element) {
-      mp.trackForm('#' + element.id, element.getAttribute(objSettings.attribute));
+      mpTracking.trackForm('#' + element.id, element.getAttribute(objSettings.attribute));
     });
   }
 
@@ -399,7 +396,7 @@ function _ready() {
               }
 
               if (strEventName) {
-                mp.track(strEventName, {}, function () {
+                mpTracking.trackEvent(strEventName, {}, function () {
                   if (element.tagName === 'A') {
                     var strHref = element.getAttribute('href'),
                       strTarget = element.getAttribute('target');
@@ -422,85 +419,149 @@ function _ready() {
   }
   // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
 }
-},{"./config.js":4,"./helpers.js":5,"./mixpanel.js":7,"querystring":3}],7:[function(require,module,exports){
+},{"./config.js":4,"./helpers.js":5,"./mixpanel-people.js":7,"./mixpanel-tracking.js":8,"./mixpanel.js":9,"querystring":3}],7:[function(require,module,exports){
+/* global module, require */
+module.exports = {
+  identifyUser: identifyUser,
+  setUserProperties: setUserProperties
+};
+
+/**
+ * Identify a user with a unique ID. All subsequent actions caused by this user will be tied to this unique ID
+ * @param {string} strIdentity A string that uniquely identifies a user
+ */
+function identifyUser (strIdentity) {
+  mixpanel.identify(strIdentity);
+}
+
+/**
+ * Set properties on a user record
+ * @param {string|object} varProperty If a string, this is the name of the property. If an object, this is an associative array of names and values
+ * @param {*} [varValue] A value to set on the given property name
+ * @param {function} [fncCallback] If provided, the callback will be called after the tracking event
+ */
+function setUserProperties (varProperty, varValue, fncCallback) {
+  mixpanel.people.set(varProperty, varValue, fncCallback);
+}
+},{}],8:[function(require,module,exports){
 /* global module, require */
 var config = require('./config.js');
 
 module.exports = {
-  /**
-   * This function initializes a new instance of the Mixpanel tracking object
-   * @param {string} strToken Your Mixpanel API token
-   * @param {object} objInitProperties Mixpanel initialization properties
-   */
-  init: function init (strToken, objInitProperties) {
-    // jscs:disable
-    (function(f,b){if(!b.__SV){var a,e,i,g;window.mixpanel=b;b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;"undefined"!==typeof d?c=b[d]=[]:d="mixpanel";c.people=c.people||[];c.toString=function(b){var a="mixpanel";"mixpanel"!==d&&(a+="."+d);b||(a+=" (stub)");return a};c.people.toString=function(){return c.toString(1)+".people (stub)"};i="disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
-      for(g=0;g<i.length;g++)f(c,i[g]);b._i.push([a,e,d])};b.__SV=1.2;a=f.createElement("script");a.type="text/javascript";a.async=!0;a.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";e=f.getElementsByTagName("script")[0];e.parentNode.insertBefore(a,e)}})(document,window.mixpanel||[]);
-    // jscs:enable
-
-    mixpanel.init(strToken, objInitProperties);
-  },
-
-  /**
-   * Disable events on the Mixpanel object
-   * @param {[string]} [arrEventNames] An array of event names to disable. If passed no arguments, this function disables tracking of any event.
-   */
-  disable: function disable (arrEventNames) {
-    mixpanel.disable(arrEventNames);
-  },
-
-  /**
-   * Track an event
-   * @param {string} strEventName The name of the event
-   * @param {object} [objProperties] A set of properties to include with the event you're sending
-   * @param {function} [fncCallback] If provided, the callback function will be called after tracking the event
-   */
-  track: function track (strEventName, objProperties, fncCallback) {
-    mixpanel.track(strEventName || config.dictionary.missingEventName, objProperties || {}, fncCallback);
-  },
-
-  /**
-   * Track page viewed event
-   * @param {object} [objProperties] A set of properties to include with the event you're sending
-   */
-  trackPageView: function trackPageView (objProperties) {
-    // Works only in browser environment:
-    if (this === window) {
-      objProperties = objProperties || {};
-      objProperties[config.dictionary.pageNamePropertyName] = document.title;
-      objProperties[config.dictionary.pageURLPropertyName] = window.location.pathname;
-
-      this.track(config.dictionary.pageViewedEventName, objProperties);
-    }
-  },
-
-  /**
-   * Track link click event
-   * @param {string} strSelector A valid DOM query selector
-   * @param {object} strEventName The name of the event to track
-   * @param {object} [objProperties] A properties object or function that returns a dictionary of properties when passed a DOMElement
-   */
-  trackLink: function trackLink (strSelector, strEventName, objProperties) {
-    objProperties = objProperties || {};
-
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    mixpanel.track_links(strSelector, strEventName, objProperties);
-    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
-  },
-
-  /**
-   * Track form submission event
-   * @param {string} strSelector A valid DOM query
-   * @param {object} strEventName The name of the event to track
-   * @param {object} [objProperties] A properties object or function that returns a dictionary of properties when passed a DOMElement
-   */
-  trackForm: function trackForm (strSelector, strEventName, objProperties) {
-    objProperties = objProperties || {};
-
-    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-    mixpanel.track_forms(strSelector, strEventName, objProperties);
-    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
-  }
+  disableEvents: disableEvents,
+  trackEvent: trackEvent,
+  trackPageView: trackPageView,
+  trackLink: trackLink,
+  trackForm: trackForm,
+  trackCharge: trackCharge,
+  registerProperties: registerProperties,
+  unregisterProperties: unregisterProperties
 };
-},{"./config.js":4}]},{},[6])(6)
+
+/**
+ * Disable events on the Mixpanel object
+ * @param {[string]} [arrEventNames] An array of event names to disable. If passed no arguments, this function disables tracking of any event.
+ */
+function disableEvents (arrEventNames) {
+  mixpanel.disable(arrEventNames);
+}
+
+/**
+ * Track an event
+ * @param {string} strEventName The name of the event
+ * @param {object} [objProperties] A set of properties to include with the event you're sending
+ * @param {function} [fncCallback] If provided, the callback function will be called after tracking the event
+ */
+function trackEvent (strEventName, objProperties, fncCallback) {
+  mixpanel.track(strEventName || config.dictionary.missingEventName, objProperties || {}, fncCallback);
+}
+
+/**
+ * Track page viewed event
+ * @param {object} [objProperties] A set of properties to include with the event you're sending
+ */
+function trackPageView (objProperties) {
+  // Works only in browser environment:
+  if (this === window) {
+    objProperties = objProperties || {};
+    objProperties[config.dictionary.pageNamePropertyName] = document.title;
+    objProperties[config.dictionary.pageURLPropertyName] = window.location.pathname;
+
+    this.track(config.dictionary.pageViewedEventName, objProperties);
+  }
+}
+
+/**
+ * Track link click event
+ * @param {string} strSelector A valid DOM query selector
+ * @param {object} strEventName The name of the event to track
+ * @param {object} [objProperties] A properties object or function that returns a dictionary of properties when passed a DOMElement
+ */
+function trackLink (strSelector, strEventName, objProperties) {
+  // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+  mixpanel.track_links(strSelector, strEventName, objProperties);
+  // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+}
+
+/**
+ * Track form submission event
+ * @param {string} strSelector A valid DOM query
+ * @param {object} strEventName The name of the event to track
+ * @param {object} [objProperties] A properties object or function that returns a dictionary of properties when passed a DOMElement
+ */
+function trackForm (strSelector, strEventName, objProperties) {
+  // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+  mixpanel.track_forms(strSelector, strEventName, objProperties);
+  // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+}
+
+/**
+ * Record that you have charged the current user a certain amount of money
+ * @param {number} fltAmount The amount of money charged to the current
+ * @param {object} [objProperties] An associative array of properties associated with the charge
+ * @param {function} [fncCallback] If provided, the callback will be called when the server responds
+ */
+function trackCharge (fltAmount, objProperties, fncCallback) {
+  // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+  mixpanel.people.track_charge(fltAmount, objProperties, fncCallback);
+  // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+}
+
+/**
+ * Register a set of super properties, which are included with all events
+ * @param {object} objProperties An associative array of properties to store about the user
+ * @param {number} [intDays] How many days since the user's last visit to store the super properties
+ */
+function registerProperties (objProperties, intDays) {
+  mixpanel.register(objProperties, intDays);
+}
+
+/**
+ * Delete a super property stored with the current user
+ * @param {string} strProperty The name of the super property to remove
+ */
+function unregisterProperties (strProperty) {
+  mixpanel.unregister(strProperty);
+}
+},{"./config.js":4}],9:[function(require,module,exports){
+/* global module */
+
+module.exports = {
+  init: init
+};
+
+/**
+ * This function initializes a new instance of the Mixpanel tracking object
+ * @param {string} strToken Your Mixpanel API token
+ * @param {object} objInitProperties Mixpanel initialization properties
+ */
+function init (strToken, objInitProperties) {
+  // jscs:disable
+  (function(f,b){if(!b.__SV){var a,e,i,g;window.mixpanel=b;b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;"undefined"!==typeof d?c=b[d]=[]:d="mixpanel";c.people=c.people||[];c.toString=function(b){var a="mixpanel";"mixpanel"!==d&&(a+="."+d);b||(a+=" (stub)");return a};c.people.toString=function(){return c.toString(1)+".people (stub)"};i="disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
+    for(g=0;g<i.length;g++)f(c,i[g]);b._i.push([a,e,d])};b.__SV=1.2;a=f.createElement("script");a.type="text/javascript";a.async=!0;a.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";e=f.getElementsByTagName("script")[0];e.parentNode.insertBefore(a,e)}})(document,window.mixpanel||[]);
+  // jscs:enable
+
+  mixpanel.init(strToken, objInitProperties);
+}
+},{}]},{},[6])(6)
 });
