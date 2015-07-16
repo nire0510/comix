@@ -179,6 +179,12 @@ exports.encode = exports.stringify = require('./encode');
 
 },{"./decode":1,"./encode":2}],4:[function(require,module,exports){
 /* global module */
+
+/**
+ * Configuration module
+ * @module config
+ */
+
 // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
 module.exports = {
   mixpanel_init: ['cookie_expiration', 'cross_subdomain_cookie', 'disable_persistence', 'persistence', 'persistence_name', 'secure_cookie', 'track_links_timeout', 'upgrade'],
@@ -220,9 +226,13 @@ module.exports = {
 };
 // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
 },{}],5:[function(require,module,exports){
+/* global module */
+
 /**
- * Created by nir on 6/14/15.
+ * Helpers module
+ * @module helpers
  */
+
 module.exports = {
   /**
    * Find parent element of another element
@@ -266,7 +276,7 @@ module.exports = {
   }
 };
 },{}],6:[function(require,module,exports){
-/* global module, require, global */
+/* global module */
 var config = require('./config.js'),
   decode = require('querystring').decode,
   helpers = require('./helpers.js'),
@@ -282,16 +292,31 @@ module.exports = {
   trackEvent: mpTracking.trackEvent,
   trackCharge: mpTracking.trackCharge,
   disableEvents: mpTracking.disableEvents,
-  registerProperties: mpTracking.registerProperties,
-  unregisterProperties: mpTracking.unregisterProperties,
+  registerEventsProperties: mpTracking.registerEventsProperties,
+  unregisterEventsProperties: mpTracking.unregisterEventsProperties,
 
   identifyUser: mpPeople.identifyUser,
-  setUserProperties: mpPeople.setUserProperties
+  registerUserProperties: mpTracking.registerUserProperties
 };
 
 /**
  * Comix initialization
  * @param {object} objParams Initialization parameters
+ * @param {string} objParams.token Your Mixpanel token
+ * @param {object} [objParams.additional_properties={}] Additional properties which are sent with every track event
+ * @param {string} [objParams.attribute="data-comix"] Attribute name which its value contains the event name for all track_links & track_forms events. (it should not match any existing track_custom events names)
+ * @param {boolean} [objParams.track_pageview=false] Should page view be tracked? the ebent name is the document's title
+ * @param {boolean} [objParams.track_links=false] Should links clicks be tracked? requires to have an attribute named {@link objParams.attribute}
+ * @param {boolean} [objParams.track_forms=false] Should forms submissions be tracked? requires to have an attribute named {@link objParams.attribute}
+ * @param {boolean|object[]} objParams.track_custom Should custom events be tracked? can be either false or an array of custom events otherwise
+ * @param {number} [objParams.cookie_expiration=365] Super properties cookie expiration (in days)
+ * @param {boolean} [objParams.cross_subdomain_cookie=true] Super properties span subdomains
+ * @param {boolean} [objParams.disable_persistence=false] If this is true, the mixpanel cookie or localStorage entry will be deleted, and no user persistence will take place
+ * @param {string} [objParams.persistence="cookie"] Type of persistent store for super properties (cookie/localStorage) if set to "localStorage", any existing mixpanel cookie value with the same persistence_name will be transferred to localStorage and deleted
+ * @param {string} [objParams.persistence_name=""] Name for super properties persistent store
+ * @param {boolean} [objParams.secure_cookie=false] If This is true, mixpanel cookies will be marked as secure, meaning they will only be transmitted over https
+ * @param {number} [objParams.track_links_timeout=300] The amount of time track_links will wait for Mixpanel's servers to respond
+ * @param {boolean} [objParams.upgrade=false] if you set upgrade to be true, the library will check for a cookie from our old js library and import super properties from it
  */
 function init (objParams) {
   var objInitProperties = {};
@@ -328,6 +353,7 @@ function init (objParams) {
 
 /**
  * Mixpanel library ready callback
+ * @callback readyCallback
  * @private
  */
 function _ready () {
@@ -339,7 +365,7 @@ function _ready () {
   // Extract all query string tokens & add them to all events along with the additional properties:
   // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
   if (this === window) {
-    mpTracking.registerProperties(helpers.extend(decode(document.location.search && document.location.search.substr(1)) || {}, objSettings.additional_properties));
+    mpTracking.registerEventProperties(helpers.extend(decode(document.location.search && document.location.search.substr(1)) || {}, objSettings.additional_properties));
   }
 
   // Should track page views?
@@ -420,10 +446,16 @@ function _ready () {
   // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
 }
 },{"./config.js":4,"./helpers.js":5,"./mixpanel-people.js":7,"./mixpanel-tracking.js":8,"./mixpanel.js":9,"querystring":3}],7:[function(require,module,exports){
-/* global module, require */
+/* global module */
+
+/**
+ * Mixpanel people module
+ * @module mixpanel-people
+ */
+
 module.exports = {
   identifyUser: identifyUser,
-  setUserProperties: setUserProperties
+  registerUserProperties: registerUserProperties
 };
 
 /**
@@ -440,11 +472,17 @@ function identifyUser (strIdentity) {
  * @param {*} [varValue] A value to set on the given property name
  * @param {function} [fncCallback] If provided, the callback will be called after the tracking event
  */
-function setUserProperties (varProperty, varValue, fncCallback) {
+function registerUserProperties (varProperty, varValue, fncCallback) {
   mixpanel.people.set(varProperty, varValue, fncCallback);
 }
 },{}],8:[function(require,module,exports){
 /* global module, require */
+
+/**
+ * Mixpanel tracking module
+ * @module mixpanel-tracking
+ */
+
 var config = require('./config.js');
 
 module.exports = {
@@ -454,13 +492,13 @@ module.exports = {
   trackLink: trackLink,
   trackForm: trackForm,
   trackCharge: trackCharge,
-  registerProperties: registerProperties,
-  unregisterProperties: unregisterProperties
+  registerEventsProperties: registerEventsProperties,
+  unregisterEventsProperties: unregisterEventsProperties
 };
 
 /**
  * Disable events on the Mixpanel object
- * @param {[string]} [arrEventNames] An array of event names to disable. If passed no arguments, this function disables tracking of any event.
+ * @param [string] [arrEventNames] An array of event names to disable. If passed no arguments, this function disables tracking of any event.
  */
 function disableEvents (arrEventNames) {
   mixpanel.disable(arrEventNames);
@@ -532,7 +570,7 @@ function trackCharge (fltAmount, objProperties, fncCallback) {
  * @param {object} objProperties An associative array of properties to store about the user
  * @param {number} [intDays] How many days since the user's last visit to store the super properties
  */
-function registerProperties (objProperties, intDays) {
+function registerEventsProperties (objProperties, intDays) {
   mixpanel.register(objProperties, intDays);
 }
 
@@ -540,11 +578,16 @@ function registerProperties (objProperties, intDays) {
  * Delete a super property stored with the current user
  * @param {string} strProperty The name of the super property to remove
  */
-function unregisterProperties (strProperty) {
+function unregisterEventsProperties (strProperty) {
   mixpanel.unregister(strProperty);
 }
 },{"./config.js":4}],9:[function(require,module,exports){
 /* global module */
+
+/**
+ * Mixpanel main module
+ * @module mixpanel
+ */
 
 module.exports = {
   init: init
