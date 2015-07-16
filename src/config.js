@@ -1,4 +1,10 @@
 /* global module */
+
+/**
+ * Configuration module
+ * @module config
+ */
+
 // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
 module.exports = {
   mixpanel_init: ['cookie_expiration', 'cross_subdomain_cookie', 'disable_persistence', 'persistence', 'persistence_name', 'secure_cookie', 'track_links_timeout', 'upgrade'],

@@ -1,4 +1,4 @@
-/* global module, require, global */
+/* global module */
 var config = require('./config.js'),
   decode = require('querystring').decode,
   helpers = require('./helpers.js'),
@@ -24,6 +24,21 @@ module.exports = {
 /**
  * Comix initialization
  * @param {object} objParams Initialization parameters
+ * @param {string} objParams.token Your Mixpanel token
+ * @param {object} [objParams.additional_properties={}] Additional properties which are sent with every track event
+ * @param {string} [objParams.attribute="data-comix"] Attribute name which its value contains the event name for all track_links & track_forms events. (it should not match any existing track_custom events names)
+ * @param {boolean} [objParams.track_pageview=false] Should page view be tracked? the ebent name is the document's title
+ * @param {boolean} [objParams.track_links=false] Should links clicks be tracked? requires to have an attribute named {@link objParams.attribute}
+ * @param {boolean} [objParams.track_forms=false] Should forms submissions be tracked? requires to have an attribute named {@link objParams.attribute}
+ * @param {boolean|object[]} objParams.track_custom Should custom events be tracked? can be either false or an array of custom events otherwise
+ * @param {number} [objParams.cookie_expiration=365] Super properties cookie expiration (in days)
+ * @param {boolean} [objParams.cross_subdomain_cookie=true] Super properties span subdomains
+ * @param {boolean} [objParams.disable_persistence=false] If this is true, the mixpanel cookie or localStorage entry will be deleted, and no user persistence will take place
+ * @param {string} [objParams.persistence="cookie"] Type of persistent store for super properties (cookie/localStorage) if set to "localStorage", any existing mixpanel cookie value with the same persistence_name will be transferred to localStorage and deleted
+ * @param {string} [objParams.persistence_name=""] Name for super properties persistent store
+ * @param {boolean} [objParams.secure_cookie=false] If This is true, mixpanel cookies will be marked as secure, meaning they will only be transmitted over https
+ * @param {number} [objParams.track_links_timeout=300] The amount of time track_links will wait for Mixpanel's servers to respond
+ * @param {boolean} [objParams.upgrade=false] if you set upgrade to be true, the library will check for a cookie from our old js library and import super properties from it
  */
 function init (objParams) {
   var objInitProperties = {};
@@ -60,6 +75,7 @@ function init (objParams) {
 
 /**
  * Mixpanel library ready callback
+ * @callback readyCallback
  * @private
  */
 function _ready () {

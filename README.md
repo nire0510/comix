@@ -6,7 +6,7 @@ Mixpanel driver library for web applications
 `npm install comix`
 
 ## Usage
-1. Include `comix.min.js` script file to the top of your page (`defer` or `async` attributes are not allowed):  
+1. Include `comix.min.js` script file to the top of your page (`defer` or `async` attributes are not recommended):  
 `<script src="node_modules/comix/comix.min.js"></script>`
 2. Add the following initialization code block to the bottom of your page:  
   ```javascript

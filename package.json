@@ -3,13 +3,16 @@
   "version": "0.1.2",
   "description": "Mixpanel driver library for web applications",
   "main": "src/main.js",
-  "dependencies": {},
+  "dependencies": {
+  },
   "devDependencies": {
-    "browserify": "^10.2.3"
+    "browserify": "^10.2.3",
+    "jsdoc": "^3.3.2"
   },
   "scripts": {
     "build": "browserify src/main.js --standalone comix | uglifyjs > dist/comix.min.js",
-    "build-unminified": "browserify src/main.js --standalone comix > dist/comix.js"
+    "build-unminified": "browserify src/main.js --standalone comix > dist/comix.js",
+    "jsdoc": "./node_modules/.bin/jsdoc --readme README.md  --configure ./.jsdocrc "
   },
   "keywords": [
     "tracking",

@@ -1,4 +1,10 @@
 /* global module, require */
+
+/**
+ * Mixpanel tracking module
+ * @module mixpanel-tracking
+ */
+
 var config = require('./config.js');
 
 module.exports = {
@@ -14,7 +20,7 @@ module.exports = {
 
 /**
  * Disable events on the Mixpanel object
- * @param {[string]} [arrEventNames] An array of event names to disable. If passed no arguments, this function disables tracking of any event.
+ * @param [string] [arrEventNames] An array of event names to disable. If passed no arguments, this function disables tracking of any event.
  */
 function disableEvents (arrEventNames) {
   mixpanel.disable(arrEventNames);

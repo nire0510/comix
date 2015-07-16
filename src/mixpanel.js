@@ -1,5 +1,10 @@
 /* global module */
 
+/**
+ * Mixpanel main module
+ * @module mixpanel
+ */
+
 module.exports = {
   init: init
 };

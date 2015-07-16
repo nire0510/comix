@@ -1,4 +1,10 @@
-/* global module, require */
+/* global module */
+
+/**
+ * Mixpanel people module
+ * @module mixpanel-people
+ */
+
 module.exports = {
   identifyUser: identifyUser,
   registerUserProperties: registerUserProperties

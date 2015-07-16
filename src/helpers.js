@@ -1,6 +1,10 @@
+/* global module */
+
 /**
- * Created by nir on 6/14/15.
+ * Helpers module
+ * @module helpers
  */
+
 module.exports = {
   /**
    * Find parent element of another element

@@ -1,0 +1,17 @@
+{
+  "tags": {
+
+  },
+  "source": {
+    "exclude": ["./src/config.js", "./src/helpers.js", "./src/mixpanel.js"]
+  },
+  "plugins": [],
+  "templates": {
+    "cleverLinks": true,
+    "monospaceLinks": true
+  },
+  "opts": {
+    "encoding": "utf8",
+    "destination": "./documentation"
+  }
+}
