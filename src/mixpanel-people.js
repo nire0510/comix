@@ -1,7 +1,7 @@
 /* global module, require */
 module.exports = {
   identifyUser: identifyUser,
-  setUserProperties: setUserProperties
+  registerUserProperties: registerUserProperties
 };
 
 /**
@@ -18,6 +18,6 @@ function identifyUser (strIdentity) {
  * @param {*} [varValue] A value to set on the given property name
  * @param {function} [fncCallback] If provided, the callback will be called after the tracking event
  */
-function setUserProperties (varProperty, varValue, fncCallback) {
+function registerUserProperties (varProperty, varValue, fncCallback) {
   mixpanel.people.set(varProperty, varValue, fncCallback);
 }

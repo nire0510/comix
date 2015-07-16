@@ -8,8 +8,8 @@ module.exports = {
   trackLink: trackLink,
   trackForm: trackForm,
   trackCharge: trackCharge,
-  registerProperties: registerProperties,
-  unregisterProperties: unregisterProperties
+  registerEventsProperties: registerEventsProperties,
+  unregisterEventsProperties: unregisterEventsProperties
 };
 
 /**
@@ -86,7 +86,7 @@ function trackCharge (fltAmount, objProperties, fncCallback) {
  * @param {object} objProperties An associative array of properties to store about the user
  * @param {number} [intDays] How many days since the user's last visit to store the super properties
  */
-function registerProperties (objProperties, intDays) {
+function registerEventsProperties (objProperties, intDays) {
   mixpanel.register(objProperties, intDays);
 }
 
@@ -94,6 +94,6 @@ function registerProperties (objProperties, intDays) {
  * Delete a super property stored with the current user
  * @param {string} strProperty The name of the super property to remove
  */
-function unregisterProperties (strProperty) {
+function unregisterEventsProperties (strProperty) {
   mixpanel.unregister(strProperty);
 }
