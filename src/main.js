@@ -87,7 +87,7 @@ function _ready () {
   // Extract all query string tokens & add them to all events along with the additional properties:
   // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
   if (this === window) {
-    mpTracking.registerEventProperties(helpers.extend(decode(document.location.search && document.location.search.substr(1)) || {}, objSettings.additional_properties));
+    mpTracking.registerEventsProperties(helpers.extend(decode(document.location.search && document.location.search.substr(1)) || {}, objSettings.additional_properties));
   }
 
   // Should track page views?
