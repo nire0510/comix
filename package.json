@@ -1,10 +1,9 @@
 {
   "name": "comix",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Mixpanel driver library for web applications",
   "main": "src/main.js",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "browserify": "^10.2.3",
     "jsdoc": "^3.3.2"
