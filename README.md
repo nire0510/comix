@@ -68,6 +68,8 @@ Mixpanel driver library for web applications
 5. Submit a pull request :D
 
 ## History
+* **0.1.4** Aug 3<sup>rd</sup>, 2015
+  * Bugfixes
 * **0.1.3** Jul 16<sup>th</sup>, 2015
   * New methods: trackCharge, disableEvents, registerEventsProperties, unregisterEventsProperties, identifyUser, registerUserProperties
   * New options in comix.init method 
