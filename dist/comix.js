@@ -209,7 +209,7 @@ module.exports = {
     //     event: 'click',
     //     name: {
     //       type: 'attribute',
-    //       value: 'data-event'
+    //       value: 'data-comix-click'
     //     }
     //   }
     // ]
@@ -467,7 +467,7 @@ function identifyUser (strIdentity) {
 }
 
 /**
- * Set properties on a user record
+ * Set properties on a user record (you must call identifyUser right after this method)
  * @param {string|object} varProperty If a string, this is the name of the property. If an object, this is an associative array of names and values
  * @param {*} [varValue] A value to set on the given property name
  * @param {function} [fncCallback] If provided, the callback will be called after the tracking event

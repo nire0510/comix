@@ -29,7 +29,7 @@ module.exports = {
     //     event: 'click',
     //     name: {
     //       type: 'attribute',
-    //       value: 'data-event'
+    //       value: 'data-comix-click'
     //     }
     //   }
     // ]
