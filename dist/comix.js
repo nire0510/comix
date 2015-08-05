@@ -296,7 +296,7 @@ module.exports = {
   unregisterEventsProperties: mpTracking.unregisterEventsProperties,
 
   identifyUser: mpPeople.identifyUser,
-  registerUserProperties: mpTracking.registerUserProperties
+  registerUserProperties: mpPeople.registerUserProperties
 };
 
 /**

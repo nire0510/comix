@@ -68,7 +68,7 @@ Mixpanel driver library for web applications
 5. Submit a pull request :D
 
 ## History
-* **0.1.6** Aug 5<sup>rd</sup>, 2015
+* **0.1.7** Aug 5<sup>rd</sup>, 2015
   * Bugfixes
 * **0.1.3** Jul 16<sup>th</sup>, 2015
   * New methods: trackCharge, disableEvents, registerEventsProperties, unregisterEventsProperties, identifyUser, registerUserProperties
