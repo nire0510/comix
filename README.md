@@ -1,5 +1,5 @@
 # Comix
-Analytics tool driver for web applications
+Analytics tool driver for web applications - make tracking events much easier
 
 ## Installation
 * Install **Comix** with npm:  
@@ -13,8 +13,8 @@ Analytics tool driver for web applications
   comix.init({
     // (object) Your analytics tool token:
     tokens: {
-        mixpanel: '', // (string) Your Mixpanel token (optional)
-        google: '' // (string) Your google analytics token (optional)
+      mp: '', // (string) Your Mixpanel token (optional)
+      ga: ''  // (string) Your Google Analytics token (optional)
     },
     
     // (object): Additional properties which are sent with every track event:
@@ -71,7 +71,7 @@ Analytics tool driver for web applications
 5. Submit a pull request :D
 
 ## History
-* **0.2.0** Nov 22<sup>nd</sup>, 2015
+* **0.2.1** Nov 22<sup>nd</sup>, 2015
   * Multiple providers support (Mixpanel, Google Analytics)
   * Bugfixes
 * **0.1.7** Aug 5<sup>rd</sup>, 2015

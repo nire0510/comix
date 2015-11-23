@@ -1,6 +1,6 @@
 {
   "name": "comix",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Mixpanel & Google Analytics driver library for web applications",
   "main": "src/main.js",
   "dependencies": {},
