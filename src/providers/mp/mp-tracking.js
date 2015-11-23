@@ -5,7 +5,7 @@
  * @module mixpanel-tracking
  */
 
-var config = require('./config.js');
+var config = require('../../config.js');
 
 module.exports = {
   disableEvents: disableEvents,
@@ -42,7 +42,7 @@ function trackEvent (strEventName, objProperties, fncCallback) {
  */
 function trackPageView (objProperties) {
   // Works only in browser environment:
-  if (this === window) {
+  if (process.browser) {
     objProperties = objProperties || {};
     objProperties[config.dictionary.pageNamePropertyName] = document.title;
     objProperties[config.dictionary.pageURLPropertyName] = window.location.pathname;

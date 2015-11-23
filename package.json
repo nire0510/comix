@@ -1,7 +1,7 @@
 {
   "name": "comix",
-  "version": "0.1.7",
-  "description": "Mixpanel driver library for web applications",
+  "version": "0.2.0",
+  "description": "Mixpanel & Google Analytics driver library for web applications",
   "main": "src/main.js",
   "dependencies": {},
   "devDependencies": {
@@ -11,12 +11,14 @@
   "scripts": {
     "build": "browserify src/main.js --standalone comix | uglifyjs > dist/comix.min.js",
     "build-unminified": "browserify src/main.js --standalone comix > dist/comix.js",
-    "jsdoc": "./node_modules/.bin/jsdoc --readme README.md  --configure ./.jsdocrc ./src"
+    "jsdoc": "./node_modules/.bin/jsdoc --readme README.md  --configure ./.jsdocrc ./src",
+    "publish": ""
   },
   "keywords": [
     "tracking",
     "analytics",
     "mixpanel",
+    "google",
     "web",
     "tool",
     "library",

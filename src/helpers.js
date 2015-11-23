@@ -18,7 +18,7 @@ module.exports = {
       elmTarget = elmTarget.parentNode;
     }
 
-    return elmTarget;
+    return elmTarget.parentNode;
   },
 
   /**

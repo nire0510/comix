@@ -1,4 +1,6 @@
 /* global module */
+var mpTracking = require('./mp-tracking'),
+  mpPeople = require('./mp-people');
 
 /**
  * Mixpanel main module
@@ -6,7 +8,20 @@
  */
 
 module.exports = {
-  init: init
+  init: init,
+
+  track: mpTracking.trackEvent,
+  trackEvent: mpTracking.trackEvent,
+  trackCharge: mpTracking.trackCharge,
+  trackPageView: mpTracking.trackPageView,
+  trackLink: mpTracking.trackLink,
+  trackForm: mpTracking.trackForm,
+  disableEvents: mpTracking.disableEvents,
+  registerEventsProperties: mpTracking.registerEventsProperties,
+  unregisterEventsProperties: mpTracking.unregisterEventsProperties,
+
+  identifyUser: mpPeople.identifyUser,
+  registerUserProperties: mpPeople.registerUserProperties
 };
 
 /**

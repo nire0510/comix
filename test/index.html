@@ -33,7 +33,7 @@
   You can configure <strong>Comix</strong> to track custom events, such as buttons clicks and more:
   <br/>
   <blockquote>
-    <button data-comix-click="Correct button clicked" onclick="alert('bla')">Click me (track)</button>
+    <button data-comix-click="Correct button clicked" onclick="alert('foo');">Click me (track)</button>
     <br/><br/>
     However, the button below won't be tracked since it does not match the selector of our custom rule: <br/>
     <button>Click me (no track)</button>
@@ -63,7 +63,10 @@
 
 <script>
   comix.init({
-    token: 'PUT_YOUR_MIXPANEL_TOKEN_HERE',
+    tokens: {
+      mp: 'PUT_YOUR_MIXPANEL_TOKEN_HERE',
+      ga: 'UA-46674138-15'
+    },
     track_pageview: true,
     attribute: 'data-comix',
     track_links: true,
