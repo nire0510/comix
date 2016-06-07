@@ -33,6 +33,9 @@ Analytics tool driver for web applications - make tracking events much easier
     // (boolean) Should forms submissions be tracked? requires to have an attribute named {{ attribute }}:
     track_forms: false,
     
+    // To how many ancestors should event bubble if clicked element does not match selector:
+    bubbling_threshold: 0,
+    
     // (boolean | [{}]) Should custom events be tracked? can be either false or an array of custom events otherwise:
     track_custom: [
       {
@@ -82,7 +85,7 @@ Analytics tool driver for web applications - make tracking events much easier
 5. Submit a pull request :D
 
 ## History
-* **0.2.4** Jun 6<sup>th</sup>, 2016
+* **0.2.5** Jun 6<sup>th</sup>, 2016
   * Option to collect the event properties from DOM
   * Allow bubbling event to element ancestors in case selector does not match target element
 * **0.2.1** Nov 22<sup>nd</sup>, 2015

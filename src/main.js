@@ -200,7 +200,10 @@ function _trackCustomEvents () {
           intAncestorLevel = 0;
         
         while (element.matches(item.selector) === false && intAncestorLevel < objSettings.bubbling_threshold) {
-          element = element.parentElement;
+          if (element.parentElement) {
+            element = element.parentElement;
+          }
+          intAncestorLevel++;
         }
 
         // We report only if element matches custom_event selector:
