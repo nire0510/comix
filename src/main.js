@@ -13,6 +13,7 @@ module.exports = {
   track: trackEvent,
   trackEvent: trackEvent,
   trackCharge: trackCharge,
+  trackPageView: trackPageView,
   disableEvents: disableEvents,
   registerEventsProperties: registerEventsProperties,
   unregisterEventsProperties: unregisterEventsProperties,
@@ -151,6 +152,15 @@ function trackCharge (fltAmount, objProperties, fncCallback) {
   providers.forEach(function _trackCharge (provider) {
     if (typeof provider.obj.trackCharge === 'function') {
       provider.obj.trackCharge(fltAmount, objProperties, fncCallback);
+    }
+  });
+}
+
+// Track pave-view events pragmatically:
+function trackPageView () {
+  providers.forEach(function _trackPageView (provider) {
+    if (typeof provider.obj.trackPageView === 'function') {
+      provider.obj.trackPageView();
     }
   });
 }
