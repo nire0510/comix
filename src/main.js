@@ -195,7 +195,8 @@ function _trackCustomEvents () {
       arrRegisteredEvents.push(item.selector + item.event);
       document.addEventListener(item.event, function onEvent (e) {
         var element = e.target,
-          strEventName;
+          strEventName = '',
+          objEventProperties = {};
 
         // We report only if element matches custom_event selector:
         if (element.matches(item.selector) === true) {
@@ -205,6 +206,7 @@ function _trackCustomEvents () {
           }
 
           try {
+            // event name:
             switch (item.name.type) {
               case 'attribute':
                 if (element.hasAttribute(item.name.value) === true) {
@@ -224,6 +226,30 @@ function _trackCustomEvents () {
                 }
 
                 break;
+            }
+
+            // event properties:
+            if ('properties' in item) {
+              switch (item.properties.type) {
+                case 'attribute':
+                  if (element.hasAttribute(item.properties.value) === true) {
+                    objEventProperties = JSON.parse(element.getAttribute(item.properties.value));
+                  }
+
+                  break;
+                case 'function':
+                  if (item.properties.value && typeof item.properties.value === 'function') {
+                    objEventProperties = (item.properties.value)(element);
+                  }
+
+                  break;
+                case 'text':
+                  if (item.properties.value) {
+                    objEventProperties = JSON.parse(item.properties.value);
+                  }
+
+                  break;
+              }
             }
 
             if (strEventName) {

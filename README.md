@@ -51,6 +51,17 @@ Analytics tool driver for web applications - make tracking events much easier
           // if type is 'text' - value is a string which is the event name,
           // if type is 'function' - value is a function which its returned value is the event name:
           value: 'data-comix-click'   
+        },
+        
+        // (object) The properties (meta data) of the event which will be tracked:
+        properties: {
+          // (string) Enumerator, could be either 'attribute', 'text' or 'function'
+          type: 'attribute',
+          
+          // if type is 'attribute' - value is the name of the attribute which its value contains the STRINGIFIED version of the event properties JSON object,
+          // if type is 'text' - value is a string which contains the STRINGIFIED version of the event properties JSON object,
+          // if type is 'function' - value is a function which its returned value is the event properties JSON object:
+          value: 'data-comix-props'   
         }
       }
     ]
@@ -71,6 +82,8 @@ Analytics tool driver for web applications - make tracking events much easier
 5. Submit a pull request :D
 
 ## History
+* **0.2.2** Jun 6<sup>th</sup>, 2016
+  * Option to collect the event properties from DOM
 * **0.2.1** Nov 22<sup>nd</sup>, 2015
   * Multiple providers support (Mixpanel, Google Analytics)
   * Bugfixes

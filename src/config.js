@@ -34,6 +34,10 @@ module.exports = {
     //     name: {
     //       type: 'attribute',
     //       value: 'data-comix-click'
+    //     },
+    //     properties: {
+    //       type: 'attribute',
+    //       value: 'data-comix-props'
     //     }
     //   }
     // ]
