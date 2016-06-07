@@ -373,7 +373,7 @@ function _trackCustomEvents () {
             if (strEventName) {
               providers.forEach(function _trackEvent (provider) {
                 if (typeof provider.obj.trackEvent === 'function') {
-                  provider.obj.trackEvent(strEventName, {}, function onEvent () {
+                  provider.obj.trackEvent(strEventName, objEventProperties, function onEvent () {
                     if (element.tagName === 'A') {
                       var strHref = element.getAttribute('href'),
                         strTarget = element.getAttribute('target');
