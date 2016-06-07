@@ -15,6 +15,8 @@ module.exports = {
       mp: '', // Mixpanel
       ga: ''  // Google Analytics
     },
+    // To how many ancestors should event bubbles if clicked element does not match selector:
+    bubbling_threshold: 0,
     // Additional properties which are sent with every track event:
     additional_properties: {},
     // Attribute name which its value contains the event name for all track_links & track_forms events (it should not match any existing track_custom events names):
@@ -304,7 +306,12 @@ function _trackCustomEvents () {
       document.addEventListener(item.event, function onEvent (e) {
         var element = e.target,
           strEventName = '',
-          objEventProperties = {};
+          objEventProperties = {},
+          intAncestorLevel = 0;
+        
+        while (element.matches(item.selector) === false && intAncestorLevel < objSettings.bubbling_threshold) {
+          element = element.parentElement;
+        }
 
         // We report only if element matches custom_event selector:
         if (element.matches(item.selector) === true) {

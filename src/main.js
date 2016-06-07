@@ -196,7 +196,12 @@ function _trackCustomEvents () {
       document.addEventListener(item.event, function onEvent (e) {
         var element = e.target,
           strEventName = '',
-          objEventProperties = {};
+          objEventProperties = {},
+          intAncestorLevel = 0;
+        
+        while (element.matches(item.selector) === false && intAncestorLevel < objSettings.bubbling_threshold) {
+          element = element.parentElement;
+        }
 
         // We report only if element matches custom_event selector:
         if (element.matches(item.selector) === true) {
