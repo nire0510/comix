@@ -82,7 +82,7 @@ Analytics tool driver for web applications - make tracking events much easier
 5. Submit a pull request :D
 
 ## History
-* **0.2.2** Jun 6<sup>th</sup>, 2016
+* **0.2.3** Jun 6<sup>th</sup>, 2016
   * Option to collect the event properties from DOM
 * **0.2.1** Nov 22<sup>nd</sup>, 2015
   * Multiple providers support (Mixpanel, Google Analytics)
